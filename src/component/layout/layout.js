@@ -30,10 +30,10 @@ const Layout = () => {
               <Link to="/customers">Customers</Link>
             </li>
             <li>
-              <Link to="/orders">Orders</Link>
+              <Link to="/foods">Foods</Link>
             </li>
             <li>
-              <Link to="/foods">Foods</Link>
+              <Link to="/orders">Orders</Link>
             </li>
             <li>
               <Link to="/profile">Profile</Link>
