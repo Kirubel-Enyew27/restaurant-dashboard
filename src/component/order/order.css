@@ -1,0 +1,70 @@
+.order-container h2 {
+  color: #e96b45;
+}
+.order-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.order-table td,
+.order-table th {
+  padding: 8px;
+  border: 1px solid #e96b45;
+}
+
+.order-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.order-table tr:hover {
+  background-color: #ddd;
+}
+
+.order-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #e96b45;
+  color: white;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #e96b45;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+button.edit-button {
+  background-color: #45a049;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  width: 30px;
+  height: 25px;
+  margin: 0 1.5px;
+}
+button.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  width: 30px;
+  height: 25px;
+  margin: 0 1.5px;
+}
