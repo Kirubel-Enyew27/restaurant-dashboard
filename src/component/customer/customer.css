@@ -1,3 +1,6 @@
+.customer-container h2 {
+  color: #e96b45;
+}
 .customer-table {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -7,6 +10,7 @@
 .customer-table td,
 .customer-table th {
   padding: 8px;
+  border: 1px solid #e96b45;
 }
 
 .customer-table tr:nth-child(even) {
@@ -21,7 +25,7 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #04aa6d;
+  background-color: #e96b45;
   color: white;
 }
 
@@ -35,7 +39,7 @@
 
 .pagination button {
   padding: 8px 16px;
-  background-color: #04aa6d;
+  background-color: #e96b45;
   color: white;
   border: none;
   cursor: pointer;
@@ -47,7 +51,8 @@
   cursor: not-allowed;
 }
 button.edit-button {
-  background-color: green;
+  background-color: #45a049;
+  color: white;
   border: none;
   border-radius: 3px;
   width: 30px;
@@ -56,6 +61,7 @@ button.edit-button {
 }
 button.delete-button {
   background-color: red;
+  color: white;
   border: none;
   border-radius: 3px;
   width: 30px;
