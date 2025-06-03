@@ -9,7 +9,7 @@ const Order = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 8;
+  const ordersPerPage = 10;
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -53,54 +53,55 @@ const Order = () => {
             <p>No orders found.</p>
           ) : (
             <>
-              <table className="order-table">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    {/* <th>ID</th> */}
-                    <th>Order Item</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total Price</th>
-                    <th>Status</th>
-                    <th>Customer</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentOrders.map((order, index) => (
-                    <tr key={order.order_id}>
-                      <td>{(currentPage - 1) * ordersPerPage + index + 1}</td>
-                      <td>
-                        {order.OrderItem.map((item) => (
-                          <p>{item.meal_id}</p>
-                        ))}
-                      </td>
-                      <td>
-                        {order.OrderItem.map((item) => (
-                          <p>{item.quantity.Int32}</p>
-                        ))}
-                      </td>
-                      <td>
-                        {order.OrderItem.map((item) => (
-                          <p>{item.price}</p>
-                        ))}
-                      </td>
-                      <td>{order.total_price}</td>
-                      <td>{order.order_status.String}</td>
-                      <td>{order.User.Username}</td>
-                      <td>
-                        <button className="edit-button">
-                          <FaPen className="edit-icon" />
-                        </button>{" "}
-                        <button className="delete-button">
-                          <FaTrash className="delete-icon" />
-                        </button>
-                      </td>
+              <div className="order-table-container">
+                <table className="order-table">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Order Item</th>
+                      <th>Quantity</th>
+                      <th>Unit Price</th>
+                      <th>Total Price</th>
+                      <th>Status</th>
+                      <th>Customer</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {currentOrders.map((order, index) => (
+                      <tr key={order.order_id}>
+                        <td>{(currentPage - 1) * ordersPerPage + index + 1}</td>
+                        <td>
+                          {order.OrderItem.map((item) => (
+                            <p key={item.id}>{item.name}</p>
+                          ))}
+                        </td>
+                        <td>
+                          {order.OrderItem.map((item) => (
+                            <p key={item.id}>{item.quantity.Int32}</p>
+                          ))}
+                        </td>
+                        <td>
+                          {order.OrderItem.map((item) => (
+                            <p key={item.id}>{item.price}</p>
+                          ))}
+                        </td>
+                        <td>{order.total_price}</td>
+                        <td>{order.order_status.String}</td>
+                        <td>{order.User.Username}</td>
+                        <td>
+                          <button className="edit-button">
+                            <FaPen className="edit-icon" />
+                          </button>{" "}
+                          <button className="delete-button">
+                            <FaTrash className="delete-icon" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <div className="pagination">
                 <button onClick={handlePrev} disabled={currentPage === 1}>

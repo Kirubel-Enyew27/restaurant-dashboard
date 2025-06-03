@@ -9,7 +9,7 @@ const Food = () => {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const foodsPerPage = 8;
+  const foodsPerPage = 10;
 
   const fetchFoods = async () => {
     setLoading(true);
@@ -53,53 +53,49 @@ const Food = () => {
             <p>No foods found.</p>
           ) : (
             <>
-              <table className="food-table">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    {/* <th>ID</th> */}
-                    <th>Food Name</th>
-                    <th>Picture</th>
-                    <th>Price</th>
-                    <th>Available</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentFoods.map((food, index) => (
-                    <tr key={food.MealID}>
-                      <td>{(currentPage - 1) * foodsPerPage + index + 1}</td>
-                      {/* <td>{food.MealID}</td> */}
-                      <td>{food.Name}</td>
-                      <td>
-                        <img
-                          src={food.ImgUrl}
-                          style={{
-                            width: "30px",
-                            height: "30px",
-                            objectFit: "cover",
-                            borderRadius: "3px",
-                          }}
-                        />
-                      </td>
-                      <td>ETB {food.Price}</td>
-                      <td>
-                        {food.Available.Bool && food.Available.Valid
-                          ? "Yes"
-                          : "No"}
-                      </td>
-                      <td>
-                        <button className="edit-button">
-                          <FaPen className="edit-icon" />
-                        </button>{" "}
-                        <button className="delete-button">
-                          <FaTrash className="delete-icon" />
-                        </button>
-                      </td>
+              <div className="food-table-container">
+                <table className="food-table">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Food</th>
+                      <th>Picture</th>
+                      <th>Price</th>
+                      <th>Available</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {currentFoods.map((food, index) => (
+                      <tr key={food.MealID}>
+                        <td>{(currentPage - 1) * foodsPerPage + index + 1}</td>
+                        <td>{food.Name}</td>
+                        <td>
+                          <img
+                            src={food.ImgUrl}
+                            alt={food.Name}
+                            className="food-image"
+                          />
+                        </td>
+                        <td>ETB {food.Price}</td>
+                        <td>
+                          {food.Available.Bool && food.Available.Valid
+                            ? "Yes"
+                            : "No"}
+                        </td>
+                        <td>
+                          <button className="edit-button">
+                            <FaPen className="edit-icon" />
+                          </button>
+                          <button className="delete-button">
+                            <FaTrash className="delete-icon" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <div className="pagination">
                 <button onClick={handlePrev} disabled={currentPage === 1}>

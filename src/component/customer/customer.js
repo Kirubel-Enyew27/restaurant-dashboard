@@ -9,7 +9,7 @@ const Customer = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const usersPerPage = 8;
+  const usersPerPage = 10;
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -45,43 +45,43 @@ const Customer = () => {
   return (
     <div className="customer-container">
       {loading ? (
-        <div>Loading...</div>
+        <div className="loading">Loading...</div>
       ) : (
         <>
           <h2>Customers</h2>
           {users.length === 0 ? (
-            <p>No customers found.</p>
+            <p className="no-data">No customers found.</p>
           ) : (
             <>
-              <table className="customer-table">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    {/* <th>ID</th> */}
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentUsers.map((user, index) => (
-                    <tr key={user.UserID}>
-                      <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
-                      {/* <td>{user.UserID}</td> */}
-                      <td>{user.Username}</td>
-                      <td>{user.Email}</td>
-                      <td>
-                        <button className="edit-button">
-                          <FaPen className="edit-icon" />
-                        </button>{" "}
-                        <button className="delete-button">
-                          <FaTrash className="delete-icon" />
-                        </button>
-                      </td>
+              <div className="customer-table-container">
+                <table className="customer-table">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {currentUsers.map((user, index) => (
+                      <tr key={user.UserID}>
+                        <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
+                        <td>{user.Username}</td>
+                        <td>{user.Email}</td>
+                        <td>
+                          <button className="edit-button">
+                            <FaPen className="edit-icon" />
+                          </button>
+                          <button className="delete-button">
+                            <FaTrash className="delete-icon" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <div className="pagination">
                 <button onClick={handlePrev} disabled={currentPage === 1}>
