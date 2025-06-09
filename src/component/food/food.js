@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaSearch, FaTrash } from "react-icons/fa";
+import { GiHotMeal } from "react-icons/gi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -7,6 +8,7 @@ import "./food.css";
 
 const Food = () => {
   const [foods, setFoods] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const foodsPerPage = 10;
@@ -21,6 +23,35 @@ const Food = () => {
       toast.error("Failed to load foods");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    const q = searchTerm.trim();
+    setCurrentPage(1);
+
+    if (q === "") {
+      fetchFoods(); // Empty search shows all foods
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await Axios.get("/v1/foods/search", {
+        params: { q },
+      });
+      setFoods(response.data.data);
+    } catch (error) {
+      console.error("Error searching foods:", error);
+      toast.error("Failed to load foods");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   };
 
@@ -48,7 +79,21 @@ const Food = () => {
         <div>Loading...</div>
       ) : (
         <>
-          <h2>Foods</h2>
+          <div className="food-search">
+            <GiHotMeal />
+            Foods
+            <input
+              type="text"
+              placeholder="Search..."
+              className="search-bar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyPress}
+            />
+            <button className="search-btn" onClick={handleSearch}>
+              <FaSearch />
+            </button>
+          </div>
           {foods.length === 0 ? (
             <p>No foods found.</p>
           ) : (
@@ -86,7 +131,7 @@ const Food = () => {
                         <td>
                           <button className="edit-button">
                             <FaPen className="edit-icon" />
-                          </button>
+                          </button>{" "}
                           <button className="delete-button">
                             <FaTrash className="delete-icon" />
                           </button>

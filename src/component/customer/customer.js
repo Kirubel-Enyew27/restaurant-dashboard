@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaSearch, FaTrash, FaUsers } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -7,6 +7,7 @@ import "./customer.css";
 
 const Customer = () => {
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
@@ -24,6 +25,35 @@ const Customer = () => {
     }
   };
 
+  const handleSearch = async () => {
+    const q = searchTerm.trim();
+    setCurrentPage(1);
+
+    if (q === "") {
+      fetchUsers(); // Empty search shows all customers
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await Axios.get("/v1/customers/search", {
+        params: { q },
+      });
+      setUsers(response.data.data);
+    } catch (error) {
+      console.error("Error searching users:", error);
+      toast.error("Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -33,6 +63,12 @@ const Customer = () => {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(users.length / usersPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [users, totalPages, currentPage]);
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -48,7 +84,21 @@ const Customer = () => {
         <div className="loading">Loading...</div>
       ) : (
         <>
-          <h2>Customers</h2>
+          <div className="customer-search">
+            <FaUsers />
+            Customers
+            <input
+              type="text"
+              placeholder="Search..."
+              className="search-bar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyPress}
+            />
+            <button className="search-btn" onClick={handleSearch}>
+              <FaSearch />
+            </button>
+          </div>
           {users.length === 0 ? (
             <p className="no-data">No customers found.</p>
           ) : (
@@ -65,7 +115,7 @@ const Customer = () => {
                   </thead>
                   <tbody>
                     {currentUsers.map((user, index) => (
-                      <tr key={user.UserID}>
+                      <tr key={`${user.UserID}-${index}`}>
                         <td>{(currentPage - 1) * usersPerPage + index + 1}</td>
                         <td>{user.Username}</td>
                         <td>{user.Email}</td>

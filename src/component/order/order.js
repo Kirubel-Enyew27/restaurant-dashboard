@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaReceipt, FaSearch, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -7,6 +7,7 @@ import "./order.css";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
@@ -21,6 +22,35 @@ const Order = () => {
       toast.error("Failed to load orders");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    const q = searchTerm.trim();
+    setCurrentPage(1);
+
+    if (q === "") {
+      fetchOrders(); // Empty search shows all orders
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await Axios.get("/v1/orders/search", {
+        params: { q },
+      });
+      setOrders(response.data.data);
+    } catch (error) {
+      console.error("Error searching orders:", error);
+      toast.error("Failed to load orders");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   };
 
@@ -48,7 +78,21 @@ const Order = () => {
         <div>Loading...</div>
       ) : (
         <>
-          <h2>Orders</h2>
+          <div className="order-search">
+            <FaReceipt />
+            Orders
+            <input
+              type="text"
+              placeholder="Search..."
+              className="search-bar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyPress}
+            />
+            <button className="search-btn" onClick={handleSearch}>
+              <FaSearch />
+            </button>
+          </div>
           {orders.length === 0 ? (
             <p>No orders found.</p>
           ) : (
