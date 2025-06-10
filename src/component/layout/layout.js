@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaBars } from "react-icons/fa";
 import { Link, Outlet } from "react-router-dom";
 import "./layout.css";
 
 const Layout = () => {
+  const [collabse, setCollabse] = useState(false);
+  const [activeLink, setActiveLink] = useState("");
+
+  const handleLinkClick = (linkName) => {
+    setActiveLink(linkName);
+  };
   return (
     <div className="dashboard-container">
       {/* Left Sidebar */}
-      <aside className="sidebar">
+      <aside className={collabse ? "collabsed-sidebar" : "sidebar"}>
         {/* Admin Profile Section */}
         <div className="admin-profile">
           <img
@@ -24,23 +31,54 @@ const Layout = () => {
         <nav className="sidebar-nav">
           <ul>
             <li>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link
+                to="/dashboard"
+                className={`link ${activeLink === "dashboard" ? "active" : ""}`}
+                onClick={() => handleLinkClick("dashboard")}
+              >
+                Dashboard
+              </Link>
             </li>
             <li>
-              <Link to="/customers">Customers</Link>
+              <Link
+                to="/customers"
+                className={`link ${activeLink === "customers" ? "active" : ""}`}
+                onClick={() => handleLinkClick("customers")}
+              >
+                Customers
+              </Link>
             </li>
             <li>
-              <Link to="/foods">Foods</Link>
+              <Link
+                to="/foods"
+                className={`link ${activeLink === "foods" ? "active" : ""}`}
+                onClick={() => handleLinkClick("foods")}
+              >
+                Foods
+              </Link>
             </li>
             <li>
-              <Link to="/orders">Orders</Link>
+              <Link
+                to="/orders"
+                className={`link ${activeLink === "orders" ? "active" : ""}`}
+                onClick={() => handleLinkClick("orders")}
+              >
+                Orders
+              </Link>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <Link
+                to="/profile"
+                className={`link ${activeLink === "profile" ? "active" : ""}`}
+                onClick={() => handleLinkClick("profile")}
+              >
+                Profile
+              </Link>
             </li>
           </ul>
         </nav>
       </aside>
+      <FaBars onClick={() => setCollabse(!collabse)} className="collabse-bar" />
 
       {/* Main Content Area */}
       <main className="main-content">
