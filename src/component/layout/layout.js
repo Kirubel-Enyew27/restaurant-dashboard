@@ -17,7 +17,7 @@ const Layout = () => {
         {/* Admin Profile Section */}
         <div className="admin-profile">
           <img
-            src="https://randomuser.me/api/portraits/men/32.jpg"
+            src="https://randomuser.me/api/portraits/women/85.jpg"
             alt="Admin"
             className="profile-pic"
           />
