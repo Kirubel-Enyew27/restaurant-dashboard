@@ -1,0 +1,97 @@
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e96b45, #e96b45);
+  padding: 20px;
+}
+
+.text-center {
+  color: #e96b45;
+  text-align: center;
+}
+
+.text-center a:hover {
+  cursor: pointer;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 600px;
+  min-height: 400px;
+  padding: 35px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  background-color: #fff;
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.register-card:hover {
+  transform: scale(1.02);
+}
+
+.form-label {
+  color: #e96b45;
+}
+
+/* Form Inputs */
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px auto;
+  width: 90%;
+  border: 1px solid #e96b45;
+  transition: 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #e96b45;
+  box-shadow: 0px 0px 8px #e96b45;
+}
+
+/* Button Styling */
+.register-btn {
+  background-color: #e96b45;
+  color: white;
+  border: none;
+  margin-top: 10px;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #972300;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* Alert Styling */
+.register-alert {
+  text-align: center;
+  border-radius: 8px;
+}
+
+.login-link {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  background-color: #e96b45;
+  padding: 3px;
+  border-radius: 3px;
+  transition: 0.3s ease;
+  border: none;
+  margin-top: 20px;
+  margin-left: 3px;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+  background-color: #972300;
+  cursor: pointer;
+  transform: scale(1.05);
+}
