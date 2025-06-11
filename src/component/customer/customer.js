@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaPen, FaSearch, FaTrash, FaUsers } from "react-icons/fa";
+import { FaPen, FaPlus, FaSearch, FaTrash, FaUsers } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -11,6 +12,7 @@ const Customer = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
+  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -52,6 +54,14 @@ const Customer = () => {
     if (e.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const handleClick = async (event) => {
+    event.preventDefault();
+
+    setTimeout(() => {
+      navigate("/admin/register");
+    }, 300);
   };
 
   useEffect(() => {
@@ -97,6 +107,10 @@ const Customer = () => {
             />
             <button className="search-btn" onClick={handleSearch}>
               <FaSearch />
+            </button>
+            <button className="add-btn" onClick={handleClick}>
+              <FaPlus />
+              <span> Add</span>
             </button>
           </div>
           {users.length === 0 ? (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaPen, FaSearch, FaTrash } from "react-icons/fa";
+import { FaPen, FaPlus, FaSearch, FaTrash } from "react-icons/fa";
 import { GiHotMeal } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -12,6 +13,7 @@ const Food = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const foodsPerPage = 10;
+  const navigate = useNavigate();
 
   const fetchFoods = async () => {
     setLoading(true);
@@ -55,6 +57,14 @@ const Food = () => {
     }
   };
 
+  const handleClick = async (event) => {
+    event.preventDefault();
+
+    setTimeout(() => {
+      navigate("/food/add");
+    }, 300);
+  };
+
   useEffect(() => {
     fetchFoods();
   }, []);
@@ -92,6 +102,10 @@ const Food = () => {
             />
             <button className="search-btn" onClick={handleSearch}>
               <FaSearch />
+            </button>
+            <button className="add-btn" onClick={handleClick}>
+              <FaPlus />
+              <span> Add</span>
             </button>
           </div>
           {foods.length === 0 ? (
@@ -131,7 +145,7 @@ const Food = () => {
                         <td>
                           <button className="edit-button">
                             <FaPen className="edit-icon" />
-                          </button>{" "}
+                          </button>
                           <button className="delete-button">
                             <FaTrash className="delete-icon" />
                           </button>

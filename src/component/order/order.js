@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaPen, FaReceipt, FaSearch, FaTrash } from "react-icons/fa";
+import { FaPen, FaPlus, FaReceipt, FaSearch, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -92,6 +92,10 @@ const Order = () => {
             <button className="search-btn" onClick={handleSearch}>
               <FaSearch />
             </button>
+            <button className="add-btn">
+              <FaPlus />
+              <span> Add</span>
+            </button>
           </div>
           {orders.length === 0 ? (
             <p>No orders found.</p>
@@ -136,7 +140,7 @@ const Order = () => {
                         <td>
                           <button className="edit-button">
                             <FaPen className="edit-icon" />
-                          </button>{" "}
+                          </button>
                           <button className="delete-button">
                             <FaTrash className="delete-icon" />
                           </button>
