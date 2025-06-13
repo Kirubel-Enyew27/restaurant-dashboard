@@ -3,6 +3,7 @@ import { FaPen, FaPlus, FaReceipt, FaSearch, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
+import Notification from "../notification/notification";
 import "./order.css";
 
 const Order = () => {
@@ -92,7 +93,8 @@ const Order = () => {
             <button className="search-btn" onClick={handleSearch}>
               <FaSearch />
             </button>
-            <button className="add-btn">
+            <Notification />
+            <button className="add-btn" disabled>
               <FaPlus />
               <span> Add</span>
             </button>

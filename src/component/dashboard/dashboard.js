@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaDollarSign, FaShoppingCart, FaUsers } from "react-icons/fa";
+import { FaBell, FaDollarSign, FaShoppingCart, FaUsers } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RealTimeChart from "../analytics/chart";
 import Axios from "../axiosInstance/axiosInstance";
 import "./dashboard.css";
+import Notification from "../notification/notification";
 
 const Dashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -75,7 +75,10 @@ const Dashboard = () => {
         <div>Loading...</div>
       ) : (
         <>
-          <h2>Dashboard</h2>
+          <h2>
+            Dashboard
+            <Notification />
+          </h2>
           <div className="dashboard-container">
             <div className="stats-grid">
               {stats.map((stat, index) => (
@@ -101,13 +104,6 @@ const Dashboard = () => {
                 </div>
               ))}
             </div>
-          </div>
-          <div>
-            <RealTimeChart
-              data={[12, 19, 3, 5, 2, 3]}
-              labels={["Jan", "Feb", "Mar", "Apr", "May", "Jun"]}
-              title="Monthly Sales"
-            />
           </div>
         </>
       )}

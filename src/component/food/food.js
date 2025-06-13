@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
+import Notification from "../notification/notification";
 import "./food.css";
 
 const Food = () => {
@@ -103,6 +104,7 @@ const Food = () => {
             <button className="search-btn" onClick={handleSearch}>
               <FaSearch />
             </button>
+            <Notification />
             <button className="add-btn" onClick={handleClick}>
               <FaPlus />
               <span> Add</span>
