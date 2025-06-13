@@ -53,20 +53,6 @@
   cursor: not-allowed;
 }
 
-/* .notification {
-  float: right;
-  margin: 0 10px;
-  color: white;
-  padding: 3px;
-}
-
-.notification:hover {
-  cursor: pointer;
-  background-color: #ddd;
-  transform: scale(1.12);
-  border-radius: 50%;
-} */
-
 .order-table-container {
   flex: 1;
   overflow-y: auto;
