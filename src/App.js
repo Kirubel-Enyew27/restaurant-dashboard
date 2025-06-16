@@ -42,6 +42,7 @@ function App() {
         <Route path="admin/register" element={<Register />} />
         <Route path="admin/login" element={<Login />} />
         <Route path="/food/add" element={<Add />} />
+        <Route path="/food/update/:id" element={<Add />} />
         <Route
           path="/"
           element={
@@ -55,6 +56,7 @@ function App() {
           <Route path="orders" element={<Order />} />
           <Route path="foods" element={<Food />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

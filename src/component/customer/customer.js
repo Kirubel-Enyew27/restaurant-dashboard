@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaPen, FaPlus, FaSearch, FaTrash, FaUsers } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import Axios from "../axiosInstance/axiosInstance";
 import Notification from "../notification/notification";
 import "./customer.css";
@@ -65,6 +67,37 @@ const Customer = () => {
     }, 300);
   };
 
+  const handleEdit = async (event, id) => {
+    event.preventDefault();
+    setTimeout(() => {
+      navigate(`/profile/${id}`);
+    }, 300);
+  };
+
+  const MySwal = withReactContent(Swal);
+
+  const handleDelete = (id, username) => {
+    MySwal.fire({
+      title: `Delete ${username}?`,
+      text: "Are you sure you want to delete this customer?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await Axios.delete(`/v1/customer/delete/${id}`);
+          toast.success("Customer deleted!");
+          fetchUsers();
+        } catch (error) {
+          toast.error("Failed to delete.");
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -91,6 +124,7 @@ const Customer = () => {
 
   return (
     <div className="customer-container">
+      <ToastContainer position="top-right" autoClose={3000} />
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
@@ -136,10 +170,18 @@ const Customer = () => {
                         <td>{user.Username}</td>
                         <td>{user.Email}</td>
                         <td>
-                          <button className="edit-button">
+                          <button
+                            className="edit-button"
+                            onClick={(event) => handleEdit(event, user.UserID)}
+                          >
                             <FaPen className="edit-icon" />
                           </button>
-                          <button className="delete-button">
+                          <button
+                            className="delete-button"
+                            onClick={() =>
+                              handleDelete(user.UserID, user.Username)
+                            }
+                          >
                             <FaTrash className="delete-icon" />
                           </button>
                         </td>

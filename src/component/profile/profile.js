@@ -9,6 +9,7 @@ import {
   FaTimesCircle,
   FaUser,
 } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -31,11 +32,16 @@ const Profile = () => {
   });
   const [previewImage, setPreviewImage] = useState("");
   const fileInputRef = useRef(null);
+  const { id } = useParams();
 
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
+    if (id) {
+      setUserID(id);
+      setIsEditing(true);
+    } else if (token) {
       try {
         const decoded = jwtDecode(token);
         setUserID(decoded.id);
@@ -44,7 +50,7 @@ const Profile = () => {
         toast.error("Invalid token. Please login again.");
       }
     }
-  }, [token]);
+  }, [id, token]);
 
   useEffect(() => {
     if (userID) {
@@ -119,7 +125,7 @@ const Profile = () => {
       });
       setUser(response.data.data);
       toast.success("Profile updated successfully!");
-      setIsEditing(false);
+      setTimeout(() => setIsEditing(false), 3000);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile.");
@@ -221,6 +227,7 @@ const Profile = () => {
                 <button
                   className="cancel-btn"
                   onClick={() => setIsEditing(false)}
+                  disabled={updating}
                 >
                   <FaTimesCircle className="icons" /> Cancel
                 </button>

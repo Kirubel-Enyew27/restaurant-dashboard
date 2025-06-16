@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { FaPen, FaPlus, FaSearch, FaTrash } from "react-icons/fa";
 import { GiHotMeal } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import Axios from "../axiosInstance/axiosInstance";
 import Notification from "../notification/notification";
 import "./food.css";
@@ -34,7 +36,7 @@ const Food = () => {
     setCurrentPage(1);
 
     if (q === "") {
-      fetchFoods(); // Empty search shows all foods
+      fetchFoods();
       return;
     }
 
@@ -58,19 +60,44 @@ const Food = () => {
     }
   };
 
-  const handleClick = async (event) => {
+  const handleAdd = (event) => {
     event.preventDefault();
+    navigate("/food/add");
+  };
 
-    setTimeout(() => {
-      navigate("/food/add");
-    }, 300);
+  const handleEdit = (event, id) => {
+    event.preventDefault();
+    navigate(`/food/update/${id}`);
+  };
+
+  const MySwal = withReactContent(Swal);
+
+  const handleDelete = (id, name) => {
+    MySwal.fire({
+      title: `Delete ${name}?`,
+      text: "Are you sure you want to delete this food?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await Axios.delete(`/v1/food/delete/${id}`);
+          toast.success("Food deleted!");
+          fetchFoods();
+        } catch (error) {
+          toast.error("Failed to delete.");
+        }
+      }
+    });
   };
 
   useEffect(() => {
     fetchFoods();
   }, []);
 
-  // Pagination logic
   const indexOfLastFood = currentPage * foodsPerPage;
   const indexOfFirstFood = indexOfLastFood - foodsPerPage;
   const currentFoods = foods.slice(indexOfFirstFood, indexOfLastFood);
@@ -86,6 +113,7 @@ const Food = () => {
 
   return (
     <div className="food-container">
+      <ToastContainer position="top-right" autoClose={3000} />
       {loading ? (
         <div>Loading...</div>
       ) : (
@@ -105,7 +133,7 @@ const Food = () => {
               <FaSearch />
             </button>
             <Notification />
-            <button className="add-btn" onClick={handleClick}>
+            <button className="add-btn" onClick={handleAdd}>
               <FaPlus />
               <span> Add</span>
             </button>
@@ -145,10 +173,16 @@ const Food = () => {
                             : "No"}
                         </td>
                         <td>
-                          <button className="edit-button">
+                          <button
+                            className="edit-button"
+                            onClick={(event) => handleEdit(event, food.MealID)}
+                          >
                             <FaPen className="edit-icon" />
                           </button>
-                          <button className="delete-button">
+                          <button
+                            className="delete-button"
+                            onClick={() => handleDelete(food.MealID, food.Name)}
+                          >
                             <FaTrash className="delete-icon" />
                           </button>
                         </td>
