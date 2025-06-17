@@ -10,6 +10,7 @@ import Axios from "../axiosInstance/axiosInstance";
 
 const Layout = () => {
   const [collabse, setCollabse] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeLink, setActiveLink] = useState("");
   const [user, setUser] = useState(null);
   const [userID, setUserID] = useState("");
@@ -37,6 +38,8 @@ const Layout = () => {
         } catch (error) {
           console.error("Error fetching user data:", error);
           toast.error("Failed to load user profile.");
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -53,15 +56,21 @@ const Layout = () => {
       <aside className={collabse ? "collabsed-sidebar" : "sidebar"}>
         {/* Admin Profile Section */}
         <div className="admin-profile">
-          <img
-            src={user?.ProfilePicture?.String}
-            alt="Admin"
-            className="profile-pic"
-          />
-          <div className="profile-info">
-            <h3>{user?.Username || "Admin User"}</h3>
-            <p>{user?.Email || "admin@restaurant.com"}</p>
-          </div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <img
+                src={user?.ProfilePicture?.String}
+                alt="Admin"
+                className="profile-pic"
+              />
+              <div className="profile-info">
+                <h3>{user?.Username || "Admin User"}</h3>
+                <p>{user?.Email || "admin@restaurant.com"}</p>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Navigation Links */}
