@@ -125,6 +125,10 @@ button.edit-button {
   cursor: pointer;
 }
 
+button.edit-button:disabled {
+  cursor: not-allowed;
+}
+
 button.delete-button {
   background-color: red;
   color: white;

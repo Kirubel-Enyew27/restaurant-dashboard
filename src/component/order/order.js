@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaPen, FaPlus, FaReceipt, FaSearch, FaTrash } from "react-icons/fa";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import Axios from "../axiosInstance/axiosInstance";
 import Notification from "../notification/notification";
 import "./order.css";
@@ -55,6 +57,30 @@ const Order = () => {
     }
   };
 
+  const MySwal = withReactContent(Swal);
+
+  const handleDelete = (id) => {
+    MySwal.fire({
+      title: `Delete order?`,
+      text: "Are you sure you want to delete this order?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await Axios.delete(`/v1/order/delete/${id}`);
+          toast.success("Order deleted!");
+          fetchOrders();
+        } catch (error) {
+          toast.error("Failed to delete.");
+        }
+      }
+    });
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -75,6 +101,7 @@ const Order = () => {
 
   return (
     <div className="order-container">
+      <ToastContainer position="top-right" autoClose={3000} />
       {loading ? (
         <div>Loading...</div>
       ) : (
@@ -140,10 +167,13 @@ const Order = () => {
                         <td>{order.order_status.String}</td>
                         <td>{order.User.Username}</td>
                         <td>
-                          <button className="edit-button">
+                          <button className="edit-button" disabled>
                             <FaPen className="edit-icon" />
                           </button>
-                          <button className="delete-button">
+                          <button
+                            className="delete-button"
+                            onClick={() => handleDelete(order.order_id)}
+                          >
                             <FaTrash className="delete-icon" />
                           </button>
                         </td>
