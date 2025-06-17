@@ -9,7 +9,7 @@ import {
   FaTimesCircle,
   FaUser,
 } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axiosInstance/axiosInstance";
@@ -35,7 +35,6 @@ const Profile = () => {
   const { id } = useParams();
 
   const token = localStorage.getItem("token");
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -168,12 +167,7 @@ const Profile = () => {
       </h2>
       <div className="profile-info">
         <img
-          src={
-            previewImage ||
-            `https://defeated-anatola-kiru-e1ff93d7.koyeb.app${
-              user.ProfilePicture?.String
-            }?t=${Date.now()}`
-          }
+          src={previewImage || user?.ProfilePicture?.String}
           alt="User Profile"
         />
         <div className="update-info">

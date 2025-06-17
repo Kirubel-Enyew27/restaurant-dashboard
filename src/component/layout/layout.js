@@ -1,11 +1,48 @@
-import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { Link, Outlet } from "react-router-dom";
 import "./layout.css";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Axios from "../axiosInstance/axiosInstance";
+
 const Layout = () => {
   const [collabse, setCollabse] = useState(false);
   const [activeLink, setActiveLink] = useState("");
+  const [user, setUser] = useState(null);
+  const [userID, setUserID] = useState("");
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserID(decoded.id);
+      } catch (error) {
+        console.error("Invalid token:", error);
+        toast.error("Invalid token. Please login again.");
+      }
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (userID) {
+      const fetchUserData = async () => {
+        try {
+          const response = await Axios.get(`/v1/customer/${userID}`);
+          setUser(response.data.data);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          toast.error("Failed to load user profile.");
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [userID]);
 
   const handleLinkClick = (linkName) => {
     setActiveLink(linkName);
@@ -17,13 +54,13 @@ const Layout = () => {
         {/* Admin Profile Section */}
         <div className="admin-profile">
           <img
-            src="https://randomuser.me/api/portraits/women/85.jpg"
+            src={user?.ProfilePicture?.String}
             alt="Admin"
             className="profile-pic"
           />
           <div className="profile-info">
-            <h3>Admin User</h3>
-            <p>admin@restaurant.com</p>
+            <h3>{user?.Username || "Admin User"}</h3>
+            <p>{user?.Email || "admin@restaurant.com"}</p>
           </div>
         </div>
 
