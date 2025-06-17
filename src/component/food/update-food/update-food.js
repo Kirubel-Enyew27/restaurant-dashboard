@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,19 +8,36 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../admin/login/login.css";
 import Axios from "../../axiosInstance/axiosInstance";
 
-function AddFood() {
+function UpdateFood() {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [img_url, setImgUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchFood = async () => {
+      try {
+        const response = await Axios.get(`/v1/food/${id}`);
+        const { Name, Price, ImgUrl } = response.data.data;
+        setName(Name);
+        setPrice(Price);
+        setImgUrl(ImgUrl);
+      } catch (err) {
+        toast.error("Failed to load food data");
+      }
+    };
+
+    fetchFood();
+  }, [id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -40,13 +57,13 @@ function AddFood() {
     try {
       console.log("food data: ", foodData);
 
-      const response = await Axios.patch("/v1/food/add/", foodData);
+      const response = await Axios.patch(`/v1/food/update/${id}`, foodData);
       toast.success(
-        response?.data?.data?.message || "Food added successfully!"
+        response?.data?.data?.message || "Food updated successfully!"
       );
       setTimeout(() => navigate("/foods"), 3000);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to add food");
+      toast.error(err.response?.data?.message || "Failed to update food");
     } finally {
       setLoading(false);
     }
@@ -60,13 +77,14 @@ function AddFood() {
           <Col xs={12} md={6} lg={5}>
             <Card className="login-card">
               <Card.Body>
-                <h2 className="text-center mb-4">Add Food</h2>
+                <h2 className="text-center mb-4">Update Food</h2>
                 <Form onSubmit={handleSubmit}>
                   <Form.Group controlId="formName" className="mb-3">
                     <Form.Label>Food Name</Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Enter food name"
+                      value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
                     />
@@ -77,6 +95,7 @@ function AddFood() {
                     <Form.Control
                       type="number"
                       placeholder="Enter price"
+                      value={price}
                       onChange={(e) => setPrice(e.target.value)}
                       required
                     />
@@ -87,6 +106,7 @@ function AddFood() {
                     <Form.Control
                       type="text"
                       placeholder="Enter image URL"
+                      value={img_url}
                       onChange={(e) => setImgUrl(e.target.value)}
                       required
                     />
@@ -102,7 +122,7 @@ function AddFood() {
                       {loading ? (
                         <Spinner as="span" animation="border" size="sm" />
                       ) : (
-                        "Add"
+                        "Update"
                       )}
                     </Button>
                   </div>
@@ -116,4 +136,4 @@ function AddFood() {
   );
 }
 
-export default AddFood;
+export default UpdateFood;

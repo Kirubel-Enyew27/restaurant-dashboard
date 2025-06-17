@@ -8,8 +8,9 @@ import Login from "./component/admin/login/login";
 import Register from "./component/admin/register/register";
 import Customer from "./component/customer/customer";
 import Dashboard from "./component/dashboard/dashboard";
-import Add from "./component/food/add-food/add-food";
+import AddFood from "./component/food/add-food/add-food";
 import Food from "./component/food/food";
+import UpdateFood from "./component/food/update-food/update-food";
 import RestaurantDashboard from "./component/layout/layout";
 import Order from "./component/order/order";
 import Profile from "./component/profile/profile";
@@ -41,8 +42,8 @@ function App() {
       <Routes>
         <Route path="admin/register" element={<Register />} />
         <Route path="admin/login" element={<Login />} />
-        <Route path="/food/add" element={<Add />} />
-        <Route path="/food/update/:id" element={<Add />} />
+        <Route path="/food/add" element={<AddFood />} />
+        <Route path="/food/update/:id" element={<UpdateFood />} />
         <Route
           path="/"
           element={
