@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -20,6 +20,9 @@ function UpdateFood() {
   const [price, setPrice] = useState("");
   const [img_url, setImgUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -42,30 +45,42 @@ function UpdateFood() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!name.trim() || !price || !img_url.trim()) {
-      toast.error("All fields are required");
+    const fileds = name.trim() || price || selectedImage;
+
+    if (!fileds) {
+      toast.error("Atleast one field is required");
       return;
     }
 
-    const foodData = {
-      Name: name.trim(),
-      Price: price,
-      ImgUrl: img_url.trim(),
-    };
+    const formData = new FormData();
+    formData.append("name", name.trim());
+    formData.append("price", price);
+    formData.append("food_picture", selectedImage);
 
     setLoading(true);
     try {
-      console.log("food data: ", foodData);
+      const response = await Axios.patch(`/v1/food/update/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      const response = await Axios.patch(`/v1/food/update/${id}`, foodData);
       toast.success(
-        response?.data?.data?.message || "Food updated successfully!"
+        response?.data?.data?.message || "Food added successfully!"
       );
       setTimeout(() => navigate("/foods"), 3000);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to update food");
+      toast.error(err.response?.data?.message || "Failed to add food");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
@@ -78,6 +93,16 @@ function UpdateFood() {
             <Card className="login-card">
               <Card.Body>
                 <h2 className="text-center mb-4">Update Food</h2>
+                <img
+                  src={previewImage || img_url}
+                  alt="Food Picture"
+                  style={{
+                    maxWidth: "200px",
+                    height: "200px",
+                    borderRadius: "5%",
+                    alignContent: "center",
+                  }}
+                />
                 <Form onSubmit={handleSubmit}>
                   <Form.Group controlId="formName" className="mb-3">
                     <Form.Label>Food Name</Form.Label>
@@ -102,13 +127,13 @@ function UpdateFood() {
                   </Form.Group>
 
                   <Form.Group controlId="formImage" className="mb-3">
-                    <Form.Label>Image URL</Form.Label>
+                    <Form.Label>Upload Image</Form.Label>
                     <Form.Control
-                      type="text"
+                      type="file"
                       placeholder="Enter image URL"
-                      value={img_url}
-                      onChange={(e) => setImgUrl(e.target.value)}
-                      required
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      ref={fileInputRef}
                     />
                   </Form.Group>
 
